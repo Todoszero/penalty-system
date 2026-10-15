@@ -18,10 +18,10 @@ export function SiteHeader({ active }: { active?: string }) {
           </span>
           <span className="leading-tight">
             <span className="block text-sm font-semibold sm:text-base">
-              Λιμενική Αστυνομία
+              Penalty System
             </span>
             <span className="block text-[11px] text-white/70 sm:text-xs">
-              Ηλεκτρονικές κλήσεις οχημάτων
+              Λιμενική Αστυνομία — ηλεκτρονικές κλήσεις
             </span>
           </span>
         </Link>

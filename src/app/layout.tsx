@@ -15,9 +15,9 @@ const sourceSerif = Source_Serif_4({
 });
 
 export const metadata: Metadata = {
-  title: "Λιμενική Αστυνομία — Ηλεκτρονικές κλήσεις",
+  title: "Penalty System — Λιμενική Αστυνομία",
   description:
-    "Ψηφιακή καταχώρηση κλήσεων οχημάτων για τη Λιμενική Αστυνομία, με admin εύρεση ανά ημερομηνία και πινακίδα.",
+    "Penalty System: ηλεκτρονικές κλήσεις οχημάτων για τη Λιμενική Αστυνομία, με admin εύρεση ανά ημερομηνία και πινακίδα.",
 };
 
 export default function RootLayout({

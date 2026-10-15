@@ -17,7 +17,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--sea-ink)] via-[color:var(--sea-ink)]/88 to-[color:var(--sea-ink)]/45" />
           <div className="relative mx-auto flex min-h-[78vh] max-w-6xl flex-col justify-end px-4 pb-14 pt-24 sm:px-6 sm:pb-20">
             <p className="mb-3 animate-[fadeUp_0.7s_ease-out] text-sm font-medium tracking-[0.18em] text-[color:var(--sea-foam)] uppercase">
-              Λιμενική Αστυνομία
+              Penalty System · Λιμενική Αστυνομία
             </p>
             <h1 className="max-w-2xl animate-[fadeUp_0.85s_ease-out] font-heading text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
               Ηλεκτρονικές κλήσεις οχημάτων
