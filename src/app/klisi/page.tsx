@@ -14,8 +14,7 @@ export default function KlisiPage() {
             Καταχώρηση κλήσης
           </h1>
           <p className="mt-2 text-[color:var(--sea-muted)]">
-            Συμπληρώστε την έκθεση βεβαίωσης παράβασης οχήματος σε βήματα —
-            σχεδιασμένο για tablet.
+            Συμπληρώστε την έκθεση βεβαίωσης παράβασης οχήματος σε βήματα.
           </p>
         </div>
         <CitationForm />

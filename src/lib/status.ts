@@ -1,5 +1,9 @@
 import type { CitationStatus, ObjectionOutcome } from "./types";
 
+export function isUnpaidStatus(status: CitationStatus): boolean {
+  return status !== "paid" && status !== "cancelled";
+}
+
 export const STATUS_LABELS: Record<CitationStatus, string> = {
   issued: "Εκδόθηκε",
   awaiting_objection: "Αναμονή αντιρρήσεων",

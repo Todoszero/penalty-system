@@ -73,6 +73,24 @@ export async function getCitation(id: string): Promise<Citation | null> {
   return items.find((c) => c.id === id) ?? null;
 }
 
+/** Ανεξόφλητες κλήσεις για ακριβή αντιστοίχιση πινακίδας (πολίτης). */
+export async function listUnpaidByPlate(plate: string): Promise<Citation[]> {
+  const q = plate.replace(/\s+/g, "").toUpperCase();
+  if (!q) return [];
+  const items = await ensureStore();
+  return items
+    .filter(
+      (c) =>
+        c.status !== "paid" &&
+        c.status !== "cancelled" &&
+        c.plateNumber.replace(/\s+/g, "").toUpperCase() === q
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.occurredAt).getTime() - new Date(a.occurredAt).getTime()
+    );
+}
+
 export async function createCitation(input: CitationInput): Promise<Citation> {
   const items = await ensureStore();
   const now = new Date().toISOString();
@@ -85,6 +103,7 @@ export async function createCitation(input: CitationInput): Promise<Citation> {
     status: "awaiting_objection",
     objectionOutcome: "pending",
     suspensionDays: input.suspensionDays ?? null,
+    signatureData: input.signatureData ?? null,
     commanderDecisionAt: null,
     commanderNotes: input.commanderNotes ?? "",
     paymentReference: null,

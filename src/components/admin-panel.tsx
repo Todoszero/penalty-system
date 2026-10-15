@@ -22,6 +22,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
+import { PaymentNotifications } from "@/components/payment-notifications";
 import { formatDateTime, formatEuro } from "@/lib/format";
 import { OBJECTION_LABELS, STATUS_LABELS, statusTone } from "@/lib/status";
 import type { Citation, ObjectionOutcome } from "@/lib/types";
@@ -34,11 +35,19 @@ export function AdminPanel() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [notesDraft, setNotesDraft] = useState("");
+  const [notesSaved, setNotesSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [pending, startTransition] = useTransition();
+  const [savingNotes, setSavingNotes] = useState(false);
 
   const selected = citations.find((c) => c.id === selectedId) ?? null;
+
+  useEffect(() => {
+    setNotesDraft(selected?.commanderNotes ?? "");
+    setNotesSaved(false);
+  }, [selected?.id]); // eslint-disable-line react-hooks/exhaustive-deps -- sync draft when switching citation
 
   const load = useCallback(async (filters?: {
     plate?: string;
@@ -136,23 +145,45 @@ export function AdminPanel() {
     });
   }
 
-  async function saveNotes(notes: string) {
+  async function saveNotes() {
     if (!selected) return;
-    const res = await fetch(`/api/citations/${selected.id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ commanderNotes: notes }),
-    });
-    const data = await res.json();
-    if (res.ok) {
+    setSavingNotes(true);
+    setError(null);
+    setNotesSaved(false);
+    try {
+      const res = await fetch(`/api/citations/${selected.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commanderNotes: notesDraft }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Αποτυχία αποθήκευσης σημειώσεων.");
+        return;
+      }
       setCitations((prev) =>
         prev.map((c) => (c.id === data.citation.id ? data.citation : c))
       );
+      setNotesSaved(true);
+    } catch {
+      setError("Αποτυχία σύνδεσης με τον διακομιστή.");
+    } finally {
+      setSavingNotes(false);
     }
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.4fr_1fr]">
+    <div className="mx-auto max-w-6xl space-y-2">
+      <PaymentNotifications
+        onMarkedPaid={(citation) => {
+          setCitations((prev) => {
+            const exists = prev.some((c) => c.id === citation.id);
+            if (!exists) return prev;
+            return prev.map((c) => (c.id === citation.id ? citation : c));
+          });
+        }}
+      />
+    <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
       <div className="space-y-4">
         <form
           onSubmit={applyFilters}
@@ -304,6 +335,7 @@ export function AdminPanel() {
             <div>
               <p className="text-xs uppercase tracking-wide text-[color:var(--sea-muted)]">
                 Έκθεση No {selected.number}
+                {selected.officerName ? ` · ${selected.officerName}` : ""}
               </p>
               <h3 className="font-heading text-xl text-[color:var(--sea-ink)]">
                 {selected.plateNumber}
@@ -341,7 +373,31 @@ export function AdminPanel() {
                     : "—"
                 }
               />
+              <Detail
+                label="Υπογραφή"
+                value={
+                  selected.signatureData
+                    ? "Ναι"
+                    : selected.violatorSigned
+                      ? "Δηλώθηκε (χωρίς εικόνα)"
+                      : "Όχι"
+                }
+              />
             </div>
+
+            {selected.signatureData ? (
+              <div className="rounded-xl border border-[color:var(--sea-line)] bg-white p-3">
+                <p className="text-xs uppercase tracking-wide text-[color:var(--sea-muted)]">
+                  Υπογραφή παραβάτη
+                </p>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={selected.signatureData}
+                  alt="Υπογραφή παραβάτη"
+                  className="mt-2 h-28 w-full rounded-lg border border-[color:var(--sea-line)] bg-white object-contain"
+                />
+              </div>
+            ) : null}
 
             <div>
               <p className="mb-1 text-sm font-medium text-[color:var(--sea-ink)]">
@@ -352,16 +408,60 @@ export function AdminPanel() {
                   <li key={id}>• {violationLabel(id)}</li>
                 ))}
               </ul>
+              {selected.violationNotes?.trim() ? (
+                <div className="mt-3 rounded-xl bg-[color:var(--sea-mist)]/80 p-3">
+                  <p className="text-xs uppercase tracking-wide text-[color:var(--sea-muted)]">
+                    Σημειώσεις λιμενικού
+                  </p>
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-[color:var(--sea-ink)]">
+                    {selected.violationNotes.trim()}
+                  </p>
+                </div>
+              ) : null}
+              {selected.commanderNotes?.trim() ? (
+                <div className="mt-3 rounded-xl bg-[color:var(--sea-mist)]/80 p-3">
+                  <p className="text-xs uppercase tracking-wide text-[color:var(--sea-muted)]">
+                    Σημειώσεις διοικητή
+                  </p>
+                  <p className="mt-1 whitespace-pre-wrap text-sm text-[color:var(--sea-ink)]">
+                    {selected.commanderNotes.trim()}
+                  </p>
+                </div>
+              ) : null}
             </div>
 
             <div className="space-y-1.5">
-              <Label>Σημειώσεις διοικητή</Label>
+              <Label>
+                {selected.commanderNotes?.trim()
+                  ? "Επεξεργασία σημειώσεων διοικητή"
+                  : "Σημειώσεις διοικητή"}
+              </Label>
               <Textarea
                 rows={3}
-                defaultValue={selected.commanderNotes}
-                key={selected.id + selected.updatedAt}
-                onBlur={(e) => void saveNotes(e.target.value)}
+                value={notesDraft}
+                onChange={(e) => {
+                  setNotesDraft(e.target.value);
+                  setNotesSaved(false);
+                }}
               />
+              <div className="flex items-center gap-3">
+                <Button
+                  type="button"
+                  className="h-10 bg-[color:var(--sea-ink)] text-white hover:bg-[color:var(--sea-ink)]/90"
+                  disabled={savingNotes}
+                  onClick={() => void saveNotes()}
+                >
+                  {savingNotes ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : null}
+                  Καταχώρηση
+                </Button>
+                {notesSaved && (
+                  <span className="text-sm text-[color:var(--sea-foam-deep)]">
+                    Αποθηκεύτηκε
+                  </span>
+                )}
+              </div>
             </div>
 
             {selected.status === "awaiting_objection" && (
@@ -419,6 +519,7 @@ export function AdminPanel() {
           </div>
         )}
       </aside>
+    </div>
     </div>
   );
 }

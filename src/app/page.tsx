@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ClipboardList, Shield, TabletSmartphone } from "lucide-react";
+import { ClipboardList, CreditCard, Shield, TabletSmartphone } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ export default function HomePage() {
               Καταχώρηση έκθεσης βεβαίωσης από tablet στο πεδίο, και admin
               διαχείριση με εύρεση ανά ημερομηνία και πινακίδα.
             </p>
-            <div className="mt-8 flex animate-[fadeUp_1.15s_ease-out] flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex animate-[fadeUp_1.15s_ease-out] flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
                 href="/klisi"
                 className={cn(
@@ -35,6 +35,15 @@ export default function HomePage() {
                 )}
               >
                 Νέα κλήση (tablet)
+              </Link>
+              <Link
+                href="/exofisi"
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  "h-12 border-white/40 bg-transparent text-white hover:bg-white/10"
+                )}
+              >
+                Εξόφληση κλήσης
               </Link>
               <Link
                 href="/admin"
@@ -57,7 +66,7 @@ export default function HomePage() {
             Ψηφιακή αντιστοιχία της έντυπης έκθεσης Ν. 5209/25 — χωρίς να
             αλλάζει η λογική της υπηρεσίας.
           </p>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <Idea
               icon={<TabletSmartphone className="size-5" />}
               title="Οθόνη λιμενικού"
@@ -72,6 +81,11 @@ export default function HomePage() {
               icon={<Shield className="size-5" />}
               title="Πράξη διοικητή"
               text="Μετά το τρίημερο: χωρίς εμφάνιση, αβάσιμες/βάσιμες αντιρρήσεις, εξόφληση."
+            />
+            <Idea
+              icon={<CreditCard className="size-5" />}
+              title="Εξόφληση πολίτη"
+              text="Αναζήτηση με πινακίδα, πληρωμή (EveryPay), και ειδοποίηση Admin για επιβεβαίωση."
             />
           </div>
         </section>

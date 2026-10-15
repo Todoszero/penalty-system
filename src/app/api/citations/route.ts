@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       authority:
         body.authority ||
         "Υπουργείο Ναυτιλίας και Νησιωτικής Πολιτικής",
-      portAuthority: body.portAuthority || "Λέσβος",
+      portAuthority: body.portAuthority || "Λέσβου",
     });
     return NextResponse.json({ citation }, { status: 201 });
   } catch {

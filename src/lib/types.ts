@@ -19,7 +19,6 @@ export interface Citation {
   authority: string;
   portAuthority: string;
   officerName: string;
-  officerId: string;
   createdAt: string;
   updatedAt: string;
 
@@ -28,7 +27,7 @@ export interface Citation {
   fatherName: string;
   address: string;
   city: string;
-  taxOffice: string;
+  afm: string;
   plateNumber: string;
   vehicleMake: string;
   vehicleColor: string;
@@ -47,6 +46,8 @@ export interface Citation {
   location: string;
   violatorPresent: boolean;
   violatorSigned: boolean;
+  /** PNG data URL υπογραφής παραβάτη (αν υπάρχει). */
+  signatureData: string | null;
 
   // Ε / ΣΤ — διοικητική πράξη
   status: CitationStatus;
@@ -79,3 +80,35 @@ export type CitationUpdate = Partial<
     | "fineAmount"
   >
 >;
+
+export interface Officer {
+  id: string;
+  fullName: string;
+  createdAt: string;
+}
+
+export interface PortAuthority {
+  id: string;
+  name: string;
+  createdAt: string;
+}
+
+export type PaymentNotificationStatus = "pending" | "acknowledged";
+
+/** Ειδοποίηση πληρωμής για το Admin (π.χ. μετά από EveryPay). */
+export interface PaymentNotification {
+  id: string;
+  citationId: string;
+  citationNumber: string;
+  plateNumber: string;
+  fineAmount: number;
+  fullName: string;
+  officerName: string;
+  location: string;
+  occurredAt: string;
+  portAuthority: string;
+  createdAt: string;
+  status: PaymentNotificationStatus;
+  /** Αναφορά παρόχου πληρωμών (placeholder για EveryPay). */
+  providerRef: string | null;
+}

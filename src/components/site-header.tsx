@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/", label: "Αρχική" },
   { href: "/klisi", label: "Νέα κλήση" },
+  { href: "/exofisi", label: "Εξόφληση" },
   { href: "/admin", label: "Admin" },
 ];
 

@@ -1,5 +1,10 @@
+"use client";
+
 import { SiteHeader } from "@/components/site-header";
 import { AdminPanel } from "@/components/admin-panel";
+import { OfficersManager } from "@/components/officers-manager";
+import { PortAuthoritiesManager } from "@/components/port-authorities-manager";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminPage() {
   return (
@@ -14,11 +19,45 @@ export default function AdminPage() {
             Admin κλήσεων
           </h1>
           <p className="mt-2 text-[color:var(--sea-muted)]">
-            Προβολή όλων των κλήσεων, εύρεση ανά ημερομηνία ή πινακίδα, και
-            οριστικοποίηση από τον διοικητή.
+            Προβολή κλήσεων, εύρεση, οριστικοποίηση, ειδοποιήσεις πληρωμής, και
+            καταχώριση λιμενικών / λιμενικών αρχών.
           </p>
         </div>
-        <AdminPanel />
+
+        <Tabs defaultValue="citations" className="gap-6">
+          <TabsList
+            variant="line"
+            className="h-auto w-full flex-wrap justify-start gap-1 border-b border-[color:var(--sea-line)] pb-0"
+          >
+            <TabsTrigger
+              value="citations"
+              className="h-10 px-3 text-sm data-active:text-[color:var(--sea-ink)]"
+            >
+              Κλήσεις
+            </TabsTrigger>
+            <TabsTrigger
+              value="officers"
+              className="h-10 px-3 text-sm data-active:text-[color:var(--sea-ink)]"
+            >
+              Καταχώριση λιμενικού
+            </TabsTrigger>
+            <TabsTrigger
+              value="ports"
+              className="h-10 px-3 text-sm data-active:text-[color:var(--sea-ink)]"
+            >
+              Λιμενική αρχή
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="citations">
+            <AdminPanel />
+          </TabsContent>
+          <TabsContent value="officers">
+            <OfficersManager />
+          </TabsContent>
+          <TabsContent value="ports">
+            <PortAuthoritiesManager />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
