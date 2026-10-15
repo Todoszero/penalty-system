@@ -40,27 +40,44 @@ export function AdminPanel() {
 
   const selected = citations.find((c) => c.id === selectedId) ?? null;
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (filters?: {
+    plate?: string;
+    dateFrom?: string;
+    dateTo?: string;
+  }) => {
+    const plateQ = filters?.plate ?? plate;
+    const fromQ = filters?.dateFrom ?? dateFrom;
+    const toQ = filters?.dateTo ?? dateTo;
     setLoading(true);
     setError(null);
-    const params = new URLSearchParams();
-    if (plate.trim()) params.set("plate", plate.trim());
-    if (dateFrom) params.set("dateFrom", dateFrom);
-    if (dateTo) params.set("dateTo", dateTo);
-    const res = await fetch(`/api/citations?${params.toString()}`);
-    const data = await res.json();
-    if (!res.ok) {
-      setError(data.error || "Αποτυχία φόρτωσης.");
+    try {
+      const params = new URLSearchParams();
+      if (plateQ.trim()) params.set("plate", plateQ.trim());
+      if (fromQ) params.set("dateFrom", fromQ);
+      if (toQ) params.set("dateTo", toQ);
+      const res = await fetch(`/api/citations?${params.toString()}`, {
+        cache: "no-store",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Αποτυχία φόρτωσης.");
+        setCitations([]);
+      } else {
+        setCitations(Array.isArray(data.citations) ? data.citations : []);
+      }
+    } catch {
+      setError("Αποτυχία σύνδεσης με τον διακομιστή.");
       setCitations([]);
-    } else {
-      setCitations(data.citations);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, [plate, dateFrom, dateTo]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    void load({ plate: "", dateFrom: "", dateTo: "" });
+    // initial load only — search runs via form submit
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function applyFilters(e: React.FormEvent) {
     e.preventDefault();
@@ -191,6 +208,7 @@ export function AdminPanel() {
                 setPlate("");
                 setDateFrom("");
                 setDateTo("");
+                void load({ plate: "", dateFrom: "", dateTo: "" });
               }}
             >
               Καθαρισμός
