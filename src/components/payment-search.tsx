@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { CreditCard, Loader2, Search } from "lucide-react";
+import { CreditCard, Loader2, Search, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PrivacyPolicyModal } from "@/components/privacy-policy-modal";
 import { formatDateTime, formatEuro } from "@/lib/format";
 import { STATUS_LABELS } from "@/lib/status";
 import type { CitationStatus } from "@/lib/types";
@@ -30,6 +31,7 @@ export function PaymentSearch() {
   const [pending, startTransition] = useTransition();
   const [payingId, setPayingId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   function search(e: React.FormEvent) {
     e.preventDefault();
@@ -132,19 +134,35 @@ export function PaymentSearch() {
             autoComplete="off"
           />
         </div>
-        <Button
-          type="submit"
-          className="mt-4 h-11 bg-[color:var(--sea-ink)] text-white hover:bg-[color:var(--sea-ink)]/90"
-          disabled={pending}
-        >
-          {pending ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Search className="size-4" />
-          )}
-          Αναζήτηση
-        </Button>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          <Button
+            type="submit"
+            className="h-11 bg-[color:var(--sea-ink)] text-white hover:bg-[color:var(--sea-ink)]/90"
+            disabled={pending}
+          >
+            {pending ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <Search className="size-4" />
+            )}
+            Αναζήτηση
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11"
+            onClick={() => setPrivacyOpen(true)}
+          >
+            <Shield className="size-4" />
+            Πολιτική προστασίας δεδομένων
+          </Button>
+        </div>
       </form>
+
+      <PrivacyPolicyModal
+        open={privacyOpen}
+        onClose={() => setPrivacyOpen(false)}
+      />
 
       {error && (
         <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">

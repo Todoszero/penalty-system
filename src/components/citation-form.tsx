@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { DevCredit } from "@/components/dev-credit";
 import { SelectOrManual } from "@/components/select-or-manual";
 import { SignaturePad } from "@/components/signature-pad";
 import { TouchSelect } from "@/components/touch-select";
@@ -300,6 +301,7 @@ export function CitationForm() {
             Προβολή στο Admin
           </Button>
         </div>
+        <DevCredit className="mx-auto mt-6" />
       </div>
     );
   }
@@ -690,21 +692,22 @@ export function CitationForm() {
           </p>
         )}
 
-        <div className="mt-8 flex items-center justify-between gap-3">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Button
             variant="outline"
             size="lg"
-            className="h-11"
+            className="h-11 shrink-0"
             onClick={back}
             disabled={step === 0 || pending}
           >
             <ChevronLeft className="size-4" />
             Πίσω
           </Button>
+          <DevCredit className="order-last self-center sm:order-none" />
           {step < STEPS.length - 1 ? (
             <Button
               size="lg"
-              className="h-11 bg-[color:var(--sea-ink)] text-white hover:bg-[color:var(--sea-ink)]/90"
+              className="h-11 shrink-0 bg-[color:var(--sea-ink)] text-white hover:bg-[color:var(--sea-ink)]/90"
               onClick={next}
             >
               Επόμενο
@@ -713,7 +716,7 @@ export function CitationForm() {
           ) : (
             <Button
               size="lg"
-              className="h-11 bg-[color:var(--sea-foam-deep)] text-white hover:bg-[color:var(--sea-foam-deep)]/90"
+              className="h-11 shrink-0 bg-[color:var(--sea-foam-deep)] text-white hover:bg-[color:var(--sea-foam-deep)]/90"
               onClick={submit}
               disabled={pending}
             >

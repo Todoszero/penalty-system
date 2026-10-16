@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Penalty System — Παρουσίαση προς την Αρμόδια Αρχή</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f2744;
+      --foam: #2a9d8f;
+      --foam-deep: #1f7a6f;
+      --mist: #e8f1f0;
+      --muted: #5a6b7a;
+      --line: #c5d4d8;
+      --paper: #f7fafb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Source Sans 3", system-ui, sans-serif;
+      background: #dfe7ea;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .slide {
+      width: 297mm;
+      min-height: 210mm;
+      margin: 12mm auto;
+      padding: 18mm 20mm;
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(15, 39, 68, 0.12);
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 8px;
+      background: linear-gradient(180deg, var(--foam), var(--ink));
+    }
+
+    .slide.cover {
+      background:
+        linear-gradient(115deg, var(--ink) 0%, #163a5c 55%, #1a4d5c 100%);
+      color: white;
+    }
+    .slide.cover::before { display: none; }
+
+    h1, h2, h3 { font-family: "Source Serif 4", Georgia, serif; font-weight: 700; }
+
+    .eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--foam);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .cover .eyebrow { color: #9fe0d6; }
+
+    .slide h1 {
+      font-size: 38px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .slide h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+      color: var(--ink);
+    }
+
+    .lead {
+      font-size: 18px;
+      max-width: 70ch;
+      color: rgba(255,255,255,0.88);
+    }
+
+    .meta {
+      margin-top: auto;
+      padding-top: 28px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--foam-deep);
+      border-radius: 10px;
+      padding: 16px 18px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .card p, .card li {
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    ul { padding-left: 1.15em; }
+    li { margin: 0.35em 0; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .step {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .step .n {
+      width: 28px; height: 28px;
+      margin: 0 auto 8px;
+      border-radius: 50%;
+      background: var(--mist);
+      color: var(--foam-deep);
+      font-weight: 700;
+      font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .step span {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .note {
+      margin-top: auto;
+      padding: 12px 14px;
+      background: var(--mist);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .footer-bar {
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .cover .footer-bar {
+      border-top-color: rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.55);
+    }
+
+    .checklist li { margin: 0.5em 0; font-size: 15.5px; color: var(--ink); }
+    .checklist li span { color: var(--foam-deep); font-weight: 700; margin-right: 6px; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+      flex: 1;
+      align-items: start;
+    }
+
+    @media print {
+      body { background: white; }
+      .slide {
+        margin: 0;
+        box-shadow: none;
+        width: 297mm;
+        height: 210mm;
+        min-height: 210mm;
+      }
+      @page { size: A4 landscape; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1 -->
+  <section class="slide cover">
+    <p class="eyebrow">Penalty System · Πρωτότυπο επίδειξης</p>
+    <h1>Ηλεκτρονικές κλήσεις οχημάτων<br/>για τη Λιμενική Αστυνομία</h1>
+    <p class="lead">
+      Ψηφιακή καταχώρηση Έκθεσης Βεβαίωσης Παράβασης (Ν. 5209/25),
+      διαχείριση από τη διοίκηση και εξόφληση από τον πολίτη —
+      σχεδιασμένο για χρήση σε tablet στο πεδίο.
+    </p>
+    <div class="meta">
+      <div>Παρουσίαση προς την Αρμόδια Αρχή</div>
+      <div style="margin-top:6px">Kaldellis Software · 2026</div>
+    </div>
+    <div class="footer-bar">
+      <span>Εμπιστευτικό — για υπηρεσιακή παρουσίαση</span>
+      <span>1 / 9</span>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <p class="eyebrow">Ανάγκη</p>
+    <h2>Γιατί χρειάζεται ψηφιακή λύση</h2>
+    <div class="grid-2" style="flex:1">
+      <div class="card">
+        <h3>Σήμερα (έντυπη διαδικασία)</h3>
+        <ul>
+          <li>Χειρόγραφη συμπλήρωση έκθεσης στο πεδίο</li>
+          <li>Δυσκολία εύρεσης κλήσης ανά πινακίδα / ημερομηνία</li>
+          <li>Καθυστερήσεις στην ενημέρωση διοίκησης</li>
+          <li>Χειροκίνητη παρακολούθηση εξόφλησης</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Με το Penalty System</h3>
+        <ul>
+          <li>Καταχώρηση σε βήματα από tablet</li>
+          <li>Άμεση λίστα &amp; αναζήτηση στο γραφείο</li>
+          <li>Πράξη διοικητή με καθαρό ιστορικό</li>
+          <li>Διαδρομή εξόφλησης για τον πολίτη</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      Στόχος: να διατηρηθεί η λογική της έντυπης έκθεσης, χωρίς να αλλάζει
+      ουσιαστικά η υπηρεσιακή διαδικασία — απλώς να γίνεται ταχύτερα και πιο αξιόπιστα.
+    </p>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>2 / 9</span>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <p class="eyebrow">Επισκόπηση</p>
+    <h2>Τι περιλαμβάνει το πρωτότυπο</h2>
+    <div class="grid-2" style="flex:1">
+      <div class="card">
+        <h3>Οθόνη λιμενικού</h3>
+        <p>Φόρμα σε 5 βήματα: αρχή &amp; όργανο, οδηγός/όχημα, παραβάσεις ΚΟΚ, πρόστιμο &amp; τόπος, επιβεβαίωση.</p>
+      </div>
+      <div class="card">
+        <h3>Admin διοίκησης</h3>
+        <p>Εύρεση κλήσεων, λεπτομέρειες, σημειώσεις, πράξη επιβολής (τρίημερο / αντιρρήσεις) και εξόφληση.</p>
+      </div>
+      <div class="card">
+        <h3>Εξόφληση πολίτη</h3>
+        <p>Αναζήτηση με πινακίδα, εμφάνιση ανεξόφλητων κλήσεων, κουμπί πληρωμής (έτοιμο για σύνδεση με πάροχο όπως EveryPay).</p>
+      </div>
+      <div class="card">
+        <h3>Υποστήριξη υπηρεσίας</h3>
+        <p>Κατάλογος λιμενικών &amp; λιμενικών αρχών, ψηφιακή υπογραφή παραβάτη, πολιτική προστασίας δεδομένων στη σελίδα πληρωμής.</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>3 / 9</span>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <p class="eyebrow">Ροή πεδίου</p>
+    <h2>Καταχώρηση κλήσης από τον λιμενικό</h2>
+    <div class="flow">
+      <div class="step">
+        <div class="n">1</div>
+        <strong>Αρχή &amp; όργανο</strong>
+        <span>Λιμενική αρχή και ονοματεπώνυμο από λίστα</span>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <strong>Οδηγός / όχημα</strong>
+        <span>Στοιχεία ή «παραβάτης απών» + πινακίδα, μάρκα, χρώμα</span>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <strong>Παραβάσεις</strong>
+        <span>Checklist ΚΟΚ με άγγιγμα + σημειώσεις</span>
+      </div>
+      <div class="step">
+        <div class="n">4–5</div>
+        <strong>Ποινή &amp; υπογραφή</strong>
+        <span>Πρόστιμο, τόπος, κατάσχεση, υπογραφή στην οθόνη</span>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:18px">
+      <div class="card">
+        <h3>Ευκολία σε tablet</h3>
+        <p>Μεγάλα πεδία αφής, αναζήτηση μάρκας/χρώματος χωρίς τόνους, χρωματικές κουκίδες για ταχύτητα επιλογής.</p>
+      </div>
+      <div class="card">
+        <h3>Υπογραφή παραβάτη</h3>
+        <p>Όταν δηλώνεται υπογραφή, ανοίγει πλαίσιο για γραφή με δάχτυλο/stylus πριν την οριστική καταχώρηση. Αποθηκεύεται στην κλήση.</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>4 / 9</span>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <p class="eyebrow">Διοίκηση</p>
+    <h2>Admin πίνακας — έλεγχος και πράξη</h2>
+    <div class="two-col">
+      <div>
+        <ul class="checklist">
+          <li><span>✓</span> Αναζήτηση ανά πινακίδα και ημερομηνία</li>
+          <li><span>✓</span> Πλήρη στοιχεία κλήσης &amp; παραβάσεων</li>
+          <li><span>✓</span> Εμφάνιση υπογραφής παραβάτη</li>
+          <li><span>✓</span> Σημειώσεις λιμενικού και διοικητή</li>
+          <li><span>✓</span> Πράξη επιβολής μετά το τρίημερο</li>
+          <li><span>✓</span> Ειδοποιήσεις πληρωμής από πολίτη</li>
+          <li><span>✓</span> Διαχείριση ονομάτων λιμενικών &amp; αρχών</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Παράδειγμα πράξεων</h3>
+        <ul>
+          <li>Παρήλθε τρίημερο χωρίς εμφάνιση</li>
+          <li>Αντιρρήσεις αβάσιμες (+ αφαίρεση αδείας)</li>
+          <li>Αντιρρήσεις βάσιμες — ακύρωση</li>
+          <li>Σήμανση ως εξοφλημένη</li>
+        </ul>
+        <p style="margin-top:12px;font-size:13px;color:var(--muted)">
+          Όταν ο πολίτης ολοκληρώνει πληρωμή, εμφανίζεται ειδοποίηση ώστε ο διοικητής να επιβεβαιώσει την εξόφληση.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>5 / 9</span>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <p class="eyebrow">Πολίτης</p>
+    <h2>Σελίδα εξόφλησης κλήσεων</h2>
+    <div class="flow" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="step">
+        <div class="n">1</div>
+        <strong>Αναζήτηση</strong>
+        <span>Ο πολίτης εισάγει αριθμό πινακίδας</span>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <strong>Προβολή</strong>
+        <span>Ανεξόφλητες κλήσεις, λόγοι παράβασης, ποσό</span>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <strong>Πληρωμή</strong>
+        <span>Κουμπί πληρωμής → ειδοποίηση Admin</span>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:18px;flex:1">
+      <div class="card">
+        <h3>EveryPay (επόμενο βήμα)</h3>
+        <p>Η ροή πληρωμής είναι έτοιμη ως προσομοίωση. Μπορεί να συνδεθεί με πραγματικό πάροχο (π.χ. EveryPay) χωρίς αλλαγή της λογικής ειδοποίησης–επιβεβαίωσης.</p>
+      </div>
+      <div class="card">
+        <h3>Προστασία δεδομένων</h3>
+        <p>Στη σελίδα υπάρχει πολιτική προστασίας δεδομένων: τι καταχωρείται (πινακίδα, στοιχεία κλήσης, πληρωμή), σκοπός και δικαιώματα του πολίτη.</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>6 / 9</span>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <p class="eyebrow">Κατάσταση έργου</p>
+    <h2>Πρωτότυπο επίδειξης — τι είναι έτοιμο</h2>
+    <div class="grid-2" style="flex:1">
+      <div class="card">
+        <h3>Λειτουργεί σήμερα</h3>
+        <ul>
+          <li>Πλήρης ροή καταχώρησης κλήσης</li>
+          <li>Admin με φίλτρα και πράξεις</li>
+          <li>Ψηφιακή υπογραφή</li>
+          <li>Σελίδα εξόφλησης + ειδοποιήσεις</li>
+          <li>Διαχείριση λιμενικών / αρχών</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Προτεινόμενες επόμενες φάσεις</h3>
+        <ul>
+          <li>Σύνδεση πραγματικών πληρωμών (EveryPay)</li>
+          <li>Ρόλοι χρηστών &amp; υπηρεσιακή είσοδος</li>
+          <li>Εκτύπωση / PDF έκθεσης</li>
+          <li>Offline λειτουργία στο λιμάνι</li>
+          <li>Στατιστικά &amp; αναφορές</li>
+          <li>Βάση δεδομένων παραγωγής</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">
+      Το σύστημα παρουσιάζεται ως λειτουργικό πρωτότυπο. Δεν είναι ακόμη ενσωματωμένο σε παραγωγικά συστήματα της υπηρεσίας.
+    </p>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>7 / 9</span>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <p class="eyebrow">Όφελος για την υπηρεσία</p>
+    <h2>Τι κερδίζει η Αρχή</h2>
+    <div class="grid-2" style="flex:1">
+      <div class="card">
+        <h3>Ταχύτητα στο πεδίο</h3>
+        <p>Λιγότερος χρόνος συμπλήρωσης, λιγότερα λάθη, άμεση ψηφιακή καταγραφή.</p>
+      </div>
+      <div class="card">
+        <h3>Διαφάνεια διοίκησης</h3>
+        <p>Κάθε κλήση εντοπίζεται εύκολα· αποφάσεις και πληρωμές μένουν καταγεγραμμένες.</p>
+      </div>
+      <div class="card">
+        <h3>Εξυπηρέτηση πολίτη</h3>
+        <p>Ο πολίτης βλέπει την κλήση και προχωρά σε εξόφληση χωρίς φυσική παρουσία για την αναζήτηση.</p>
+      </div>
+      <div class="card">
+        <h3>Κλιμάκωση</h3>
+        <p>Η αρχιτεκτονική επιτρέπει επέκταση σε περισσότερες αρχές, ρόλους και κανάλια πληρωμής.</p>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Penalty System · Kaldellis Software</span>
+      <span>8 / 9</span>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide cover">
+    <p class="eyebrow">Επόμενο βήμα</p>
+    <h1>Έτοιμοι για επίδειξη<br/>και συζήτηση προσαρμογής</h1>
+    <p class="lead">
+      Προτείνεται ζωντανή επίδειξη της ροής λιμενικού → διοίκησης → πολίτη,
+      και καταγραφή παρατηρήσεων της Αρχής για την επόμενη φάση ανάπτυξης.
+    </p>
+    <div class="meta">
+      <div style="font-size:18px;color:#9fe0d6;margin-bottom:8px">Kaldellis Software</div>
+      <div>
+        <a href="https://kaldellis-software.netlify.app/" style="color:#fff;text-decoration:underline;">
+          kaldellis-software.netlify.app
+        </a>
+      </div>
+      <div style="margin-top:18px;font-size:13px;opacity:0.75">
+        Penalty System · Ηλεκτρονικές κλήσεις οχημάτων · 2026
+      </div>
+    </div>
+    <div class="footer-bar">
+      <span>Ευχαριστούμε για τον χρόνο σας</span>
+      <span>9 / 9</span>
+    </div>
+  </section>
+
+</body>
+</html>
